@@ -7,14 +7,19 @@ from openpyxl import load_workbook
 
 
 def parse_product_size(pname, status, s):
-    ps = s.split("‚n")
+    ps = s.splitlines()
     d = []
     for p in ps:
-        original = p.replace(".", "").replace(" ", "")
-        name = original.split("(")[0].strip().split("|")[0].strip().replace("_", "")
-        num = original.split("|")[-1].replace(" ", "").replace("°³", "").split("(")[0]
+        try:
+            if p != '':
+                original = p.replace(".", "").replace(" ", "")
+                name = original.split("(")[0].strip().split("|")[0].strip().replace("_", "")
+                num = original.split("|")[-1].replace(" ", "").replace("°³", "").split("(")[0]
 
-        d.append([pname, status, name, int(num)])
+                d.append([pname, status, name, int(num)])
+        except ValueError:
+            print(ps)
+
 
     return d
 
