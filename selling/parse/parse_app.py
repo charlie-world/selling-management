@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8
 import xlrd
 import os
 import zipfile
@@ -25,7 +25,8 @@ def parse_xlsx(_file_name):
     wb = xlrd.open_workbook(_file_name)
     worksheet = wb.sheet_by_index(0)
 
-    product_name = _file_name.split("_")[-1].split(".xlsx")[0]
+    product_name = _file_name.split("_")[-1].split(".xlsx")[0].encode("cp437").decode("utf8")
+
 
     data = []
     result = []
@@ -63,7 +64,6 @@ def save_data(file_name):
 
     for file_name in file_list:
         try:
-            print(file_name)
             data.extend(parse_xlsx(f"./data/{file_name}"))
 
         except xlrd.biffh.XLRDError as e:
