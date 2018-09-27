@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request
 from . import __version__
-from .parse.parse_app import save_data, init
+from .parse.parse_app import save_data, init, make_html
 
 def create_app():
 
@@ -23,12 +23,10 @@ def create_app():
         file_name = f.filename
         f.save(f"./upload/{file_name}")
 
-        save_data(f.filename)
+        data = save_data(f.filename)
 
         init()
-        output_filename = f"./output/output.xlsx"
-        url = url_for('static', filename=output_filename)
 
-        return url
+        return make_html(data)
 
     return app

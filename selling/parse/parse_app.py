@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import xlrd
-import xlwt
 import os
 import zipfile
-from openpyxl import load_workbook
 
 
 def parse_product_size(pname, status, s):
@@ -71,16 +69,7 @@ def save_data(file_name):
         except xlrd.biffh.XLRDError as e:
             print(e)
 
-    workbook = xlwt.Workbook()
-    sheet = workbook.add_sheet('Sheet1')
-
-    for i in range(len(data)):
-        sheet.write(i, 0, data[i][0])
-        sheet.write(i, 1, data[i][1])
-        sheet.write(i, 2, data[i][2])
-
-    workbook.save("./output/output.xlsx")
-
+    return data
 
 def init():
     upload_list = os.listdir("./upload")
@@ -92,3 +81,28 @@ def init():
 
     for file_name in file_list:
         os.remove(f"./data/{file_name}")
+
+
+def make_html(data):
+
+    base = """
+        <table style="width:60%">
+            <tr>
+                <th>품명</th>
+                <th>색상+사이즈</th>
+                <th>수량</th>
+            </tr>
+    """
+
+    for i in range(len(data)):
+        name, color, num = data[i][0], data[i][1], data[i][2]
+        base = base + f"""
+            <tr>
+                <td>{name}</td>
+                <td>{color}</td>
+                <td>{num}</td>
+            </tr>
+        """
+
+    base = base + "</table>"
+    return base
